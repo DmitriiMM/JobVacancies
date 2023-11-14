@@ -16,6 +16,7 @@
 		A366BE0F2B02A3C3007287C5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A366BE0E2B02A3C3007287C5 /* Localizable.strings */; };
 		A366BE132B02A592007287C5 /* VacancyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A366BE122B02A592007287C5 /* VacancyCell.swift */; };
 		A366BE152B02A665007287C5 /* Vacancy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A366BE142B02A665007287C5 /* Vacancy.swift */; };
+		A3AB60042B03C980003694DF /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3AB60032B03C980003694DF /* UIView+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		A366BE0E2B02A3C3007287C5 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		A366BE122B02A592007287C5 /* VacancyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VacancyCell.swift; sourceTree = "<group>"; };
 		A366BE142B02A665007287C5 /* Vacancy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vacancy.swift; sourceTree = "<group>"; };
+		A3AB60032B03C980003694DF /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				A366BE0C2B02A2EC007287C5 /* String+Extensions.swift */,
+				A3AB60032B03C980003694DF /* UIView+Extensions.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -196,6 +199,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A366BE0D2B02A2EC007287C5 /* String+Extensions.swift in Sources */,
+				A3AB60042B03C980003694DF /* UIView+Extensions.swift in Sources */,
 				A366BDF82B029FC8007287C5 /* VacancyViewController.swift in Sources */,
 				A366BDF42B029FC8007287C5 /* AppDelegate.swift in Sources */,
 				A366BE132B02A592007287C5 /* VacancyCell.swift in Sources */,

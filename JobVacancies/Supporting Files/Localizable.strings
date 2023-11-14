@@ -9,3 +9,5 @@
 //MARK: - Vacancies scene
 "vacancies" = "Vacancies";
 "search" = "Search";
+"from" = "from";
+"to" = "to";

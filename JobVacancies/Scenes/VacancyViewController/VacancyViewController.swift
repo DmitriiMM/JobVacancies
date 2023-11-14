@@ -8,22 +8,12 @@
 import UIKit
 
 class VacancyViewController: UIViewController {
-    private let vacancies = [Vacancy(name: "Developer"),
-                             Vacancy(name: "Engineer"),
-                             Vacancy(name: "Data Scientist"),
-                             Vacancy(name: "Chef"),
-                             Vacancy(name: "Driver")]
-    
-    private lazy var searchField: UISearchBar = {
-        let search = UISearchBar()
-        search.translatesAutoresizingMaskIntoConstraints = false
-        search.barTintColor = .white
-        search.placeholder = "search".localized
-        search.delegate = self
-        search.searchBarStyle = .minimal
-        
-        return search
-    }()
+    private let vacancies = [
+        Vacancy(name: "Developer", salary: Salary(from: 80000, to: 120000, currency: "RUR"), employer: Employer(name: "Apple", logo: nil), snippet: Snippet(requirement: "Get the latest information about Apple products in one place, including information about repairs, technical support cases and much more.", responsibility: "including information about repairs, technical support cases and much moGet the latest information about Apple products in one place, including information about repairs, technical support cases and much more.")),
+        Vacancy(name: "DeveloperDeveloper Developer", salary: Salary(from: 8120000, to: 12120000, currency: "RUR"), employer: Employer(name: "Apple", logo: nil), snippet: Snippet(requirement: nil, responsibility: nil)),
+        Vacancy(name: "DeveloperDeveloper Developer", salary: Salary(from: 8120000, to: 12120000, currency: "RUR"), employer: Employer(name: "Apple", logo: nil), snippet: Snippet(requirement: nil, responsibility: "Get the latest information about Apple products in one place, including information about repairs, technical support cases and much more.")),
+        Vacancy(name: "Developer", salary: Salary(from: nil, to: 120000, currency: "RUR"), employer: Employer(name: "AppleAppleAppleAppleAppleAppleApple", logo: nil), snippet: Snippet(requirement: "Get the latest information about Apple products in one place, including information about repairs, technical support cases and much more.", responsibility: nil))
+    ]
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -40,25 +30,28 @@ class VacancyViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        
+        setupNavigationBar()
+        setupSubviews()
+    }
+    
+    private func setupNavigationBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "vacancies".localized
         
-        addSubViews()
-        addConstraints()
+        let searchController = UISearchController(searchResultsController: nil)
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        
+        searchController.searchBar.delegate = self
+        searchController.searchBar.placeholder = "Search".localized
     }
     
-    private func addSubViews() {
-        view.addSubview(searchField)
+    private func setupSubviews() {
         view.addSubview(tableView)
-    }
-    
-    private func addConstraints() {
+        
         NSLayoutConstraint.activate([
-            searchField.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            searchField.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            searchField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            
-            tableView.topAnchor.constraint(equalTo: searchField.bottomAnchor),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -111,5 +104,11 @@ extension VacancyViewController: UITableViewDataSource {
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let vacancy = vacancies[indexPath.row]
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: VacancyCell.identifier) as? VacancyCell else { return CGFloat() }
+        
+        return cell.calculateCellHeight(with: vacancy)
+    }
 }
-
