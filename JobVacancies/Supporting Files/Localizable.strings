@@ -11,3 +11,8 @@
 "search" = "Search";
 "from" = "from";
 "to" = "to";
+
+
+//MARK: - Alert
+"error" = "Error!";
+"ok" = "Ok";

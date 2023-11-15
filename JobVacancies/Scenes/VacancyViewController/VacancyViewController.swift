@@ -8,13 +8,14 @@
 import UIKit
 
 class VacancyViewController: UIViewController {
-    private let vacancies = [
-        Vacancy(name: "Developer", salary: Salary(from: 80000, to: 120000, currency: "RUR"), employer: Employer(name: "Apple", logo: nil), snippet: Snippet(requirement: "Get the latest information about Apple products in one place, including information about repairs, technical support cases and much more.", responsibility: "including information about repairs, technical support cases and much moGet the latest information about Apple products in one place, including information about repairs, technical support cases and much more.")),
-        Vacancy(name: "DeveloperDeveloper Developer", salary: Salary(from: 8120000, to: 12120000, currency: "RUR"), employer: Employer(name: "Apple", logo: nil), snippet: Snippet(requirement: nil, responsibility: nil)),
-        Vacancy(name: "DeveloperDeveloper Developer", salary: Salary(from: 8120000, to: 12120000, currency: "RUR"), employer: Employer(name: "Apple", logo: nil), snippet: Snippet(requirement: nil, responsibility: "Get the latest information about Apple products in one place, including information about repairs, technical support cases and much more.")),
-        Vacancy(name: "Developer", salary: Salary(from: nil, to: 120000, currency: "RUR"), employer: Employer(name: "AppleAppleAppleAppleAppleAppleApple", logo: nil), snippet: Snippet(requirement: "Get the latest information about Apple products in one place, including information about repairs, technical support cases and much more.", responsibility: nil))
-    ]
     
+    // MARK: - Properties
+    private var vacancies: [Vacancy] = []
+    private let loadManager = VacancyLoadManager.shared
+    private var isScrolledToEnd = false
+    private var nextPage: Int = 0
+    
+    // MARK: - Subviews
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -27,14 +28,17 @@ class VacancyViewController: UIViewController {
         return tableView
     }()
     
+    // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         
         setupNavigationBar()
         setupSubviews()
+        loadData(for: nextPage)
     }
     
+    // MARK: - Private methods
     private func setupNavigationBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "vacancies".localized
@@ -57,8 +61,34 @@ class VacancyViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
+    
+    private func loadData(for nextPage: Int) {
+        if nextPage == 0 {
+            UIBlockingProgressHUD.show()
+        }
+        loadManager.getVacancies(for: nextPage) { [weak self] result in
+            guard let self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let result):
+                    self.nextPage += 1
+                    self.isScrolledToEnd = false
+                    let oldCountVacancies = self.vacancies.count
+                    self.vacancies.append(contentsOf: result.items)
+                    self.tableView.performBatchUpdates({
+                        let indexPaths = (oldCountVacancies ..< (oldCountVacancies + result.items.count)).map { IndexPath(row: $0, section: 0) }
+                        self.tableView.insertRows(at: indexPaths, with: .automatic)
+                    }, completion: nil)
+                case .failure(let error):
+                    self.presentErrorDialog(message: error.localizedDescription)
+                }
+                UIBlockingProgressHUD.dismiss()
+            }
+        }
+    }
 }
 
+// MARK: - UISearchBarDelegate
 extension VacancyViewController: UISearchBarDelegate, UITextFieldDelegate {
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
         searchBar.setShowsCancelButton(true, animated: true)
@@ -85,6 +115,7 @@ extension VacancyViewController: UISearchBarDelegate, UITextFieldDelegate {
     }
 }
 
+// MARK: - UITableViewDelegate UITableViewDataSource
 extension VacancyViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
