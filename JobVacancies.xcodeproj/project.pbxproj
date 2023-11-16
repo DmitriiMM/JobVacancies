@@ -17,6 +17,8 @@
 		A366BE132B02A592007287C5 /* VacancyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A366BE122B02A592007287C5 /* VacancyCell.swift */; };
 		A366BE152B02A665007287C5 /* Vacancy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A366BE142B02A665007287C5 /* Vacancy.swift */; };
 		A3AB60042B03C980003694DF /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3AB60032B03C980003694DF /* UIView+Extensions.swift */; };
+		A3D029742B0546E700748BFC /* UImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D029732B0546E700748BFC /* UImageView+Extensions.swift */; };
+		A3D029772B05471E00748BFC /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = A3D029762B05471E00748BFC /* Kingfisher */; };
 		A3FBFD0F2B04DD6900573E51 /* VacancyLoadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FBFD0E2B04DD6900573E51 /* VacancyLoadManager.swift */; };
 		A3FBFD112B04DDDD00573E51 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FBFD102B04DDDD00573E51 /* NetworkClient.swift */; };
 		A3FBFD142B04DE1700573E51 /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FBFD132B04DE1700573E51 /* NetworkRequest.swift */; };
@@ -40,6 +42,7 @@
 		A366BE122B02A592007287C5 /* VacancyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VacancyCell.swift; sourceTree = "<group>"; };
 		A366BE142B02A665007287C5 /* Vacancy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vacancy.swift; sourceTree = "<group>"; };
 		A3AB60032B03C980003694DF /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
+		A3D029732B0546E700748BFC /* UImageView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UImageView+Extensions.swift"; sourceTree = "<group>"; };
 		A3FBFD0E2B04DD6900573E51 /* VacancyLoadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VacancyLoadManager.swift; sourceTree = "<group>"; };
 		A3FBFD102B04DDDD00573E51 /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
 		A3FBFD132B04DE1700573E51 /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
@@ -54,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3D029772B05471E00748BFC /* Kingfisher in Frameworks */,
 				A3FBFD1D2B04EFCB00573E51 /* ProgressHUD in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -127,6 +131,7 @@
 				A3AB60032B03C980003694DF /* UIView+Extensions.swift */,
 				A3FBFD192B04EB7700573E51 /* UIViewController+Extensions.swift */,
 				A3FBFD1E2B04EFE900573E51 /* UIBlockingProgressHUD.swift */,
+				A3D029732B0546E700748BFC /* UImageView+Extensions.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -184,6 +189,7 @@
 			name = JobVacancies;
 			packageProductDependencies = (
 				A3FBFD1C2B04EFCB00573E51 /* ProgressHUD */,
+				A3D029762B05471E00748BFC /* Kingfisher */,
 			);
 			productName = JobVacancies;
 			productReference = A366BDF02B029FC8007287C5 /* JobVacancies.app */;
@@ -215,6 +221,7 @@
 			mainGroup = A366BDE72B029FC8007287C5;
 			packageReferences = (
 				A3FBFD1B2B04EFCB00573E51 /* XCRemoteSwiftPackageReference "ProgressHUD" */,
+				A3D029752B05471E00748BFC /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = A366BDF12B029FC8007287C5 /* Products */;
 			projectDirPath = "";
@@ -256,6 +263,7 @@
 				A366BDF62B029FC8007287C5 /* SceneDelegate.swift in Sources */,
 				A366BE152B02A665007287C5 /* Vacancy.swift in Sources */,
 				A3FBFD182B04E3AF00573E51 /* Constants.swift in Sources */,
+				A3D029742B0546E700748BFC /* UImageView+Extensions.swift in Sources */,
 				A3FBFD1F2B04EFE900573E51 /* UIBlockingProgressHUD.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -407,6 +415,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -434,6 +443,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -471,6 +481,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		A3D029752B05471E00748BFC /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.10.0;
+			};
+		};
 		A3FBFD1B2B04EFCB00573E51 /* XCRemoteSwiftPackageReference "ProgressHUD" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/relatedcode/ProgressHUD";
@@ -482,6 +500,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A3D029762B05471E00748BFC /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A3D029752B05471E00748BFC /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
 		A3FBFD1C2B04EFCB00573E51 /* ProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A3FBFD1B2B04EFCB00573E51 /* XCRemoteSwiftPackageReference "ProgressHUD" */;

@@ -40,10 +40,15 @@ struct Salary: Decodable {
 struct Employer: Decodable {
     let name: String
     let logo: Logo?
+    
+    enum CodingKeys: String, CodingKey {
+        case name
+        case logo = "logo_urls"
+    }
 }
 
 struct Logo: Decodable {
-    let url: URL?
+    let original: String?
 }
 
 struct Snippet: Decodable {

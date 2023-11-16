@@ -18,4 +18,5 @@ struct AppInfo {
     
     static let apiServerType = AppScheme.test
     static let apiPerPageCount = 20
+    static let apiKey = ""
 }

@@ -13,8 +13,9 @@ final class VacancyCell: UITableViewCell {
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
+        label.textColor = .label
         label.font = .boldSystemFont(ofSize: 20)
+        label.numberOfLines = 2
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
@@ -22,7 +23,7 @@ final class VacancyCell: UITableViewCell {
     private lazy var salaryLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
+        label.textColor = .label
         label.font = .boldSystemFont(ofSize: 22)
         label.adjustsFontSizeToFitWidth = true
         return label
@@ -31,10 +32,20 @@ final class VacancyCell: UITableViewCell {
     private lazy var employerLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
+        label.textColor = .label
         label.font = .systemFont(ofSize: 17)
         label.adjustsFontSizeToFitWidth = true
         return label
+    }()
+    
+    private lazy var mainInfoStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
+        stack.distribution = .fillProportionally
+        stack.alignment = .leading
+        stack.spacing = 4
+        return stack
     }()
     
     private lazy var logoImageView: UIImageView = {
@@ -42,8 +53,7 @@ final class VacancyCell: UITableViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 10
-        imageView.backgroundColor = .white
-        imageView.addShadow(.init(color: .black, opacity: 0.1, sizeOfSet: .zero, radius: 2))
+        imageView.clipsToBounds = true
         return imageView
     }()
     
@@ -66,7 +76,8 @@ final class VacancyCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        contentView.backgroundColor = .white
+        selectionStyle = .none
+        contentView.backgroundColor = .secondarySystemGroupedBackground
         addSubViews()
         addConstraints()
     }
@@ -81,7 +92,7 @@ final class VacancyCell: UITableViewCell {
         let margins = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
         contentView.frame = contentView.frame.inset(by: margins)
         contentView.layer.cornerRadius = 10
-        contentView.addShadow(.init(color: .darkGray,
+        contentView.addShadow(.init(color: .secondaryLabel,
                                     opacity: 0.2,
                                     sizeOfSet: .zero,
                                     radius: 5))
@@ -107,26 +118,43 @@ final class VacancyCell: UITableViewCell {
         }
         
         employerLabel.text = vacancy.employer.name
-//        logoImageView.image = UIImage(systemName: "heart.fill")
         
-        if let requirement = vacancy.snippet.requirement {
+        
+            
+        if let url = vacancy.employer.logo?.original {
+            loadLogo(from: url)
+        } else {
+            logoImageView.isHidden = true
+            mainInfoStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
+        }
+        
+        if let requirement = vacancy.snippet.requirement,
+           !requirement.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             requirementLabel.text = requirement
         } else {
             requirementLabel.isHidden = true
         }
         
-        if let responsibility = vacancy.snippet.responsibility {
+        if let responsibility = vacancy.snippet.responsibility,
+           !responsibility.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             responsibilityLabel.text = responsibility
         } else {
             responsibilityLabel.isHidden = true
         }
-        
+    }
+    
+    private func loadLogo(from stringUrl: String) {
+        guard let encodedStringUrl = stringUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: encodedStringUrl)
+        else { return }
+        logoImageView.setImage(from: url)
     }
     
     private func addSubViews() {
-        contentView.addSubview(nameLabel)
-        contentView.addSubview(salaryLabel)
-        contentView.addSubview(employerLabel)
+        contentView.addSubview(mainInfoStackView)
+        mainInfoStackView.addArrangedSubview(nameLabel)
+        mainInfoStackView.addArrangedSubview(salaryLabel)
+        mainInfoStackView.addArrangedSubview(employerLabel)
         contentView.addSubview(logoImageView)
         contentView.addSubview(requirementLabel)
         contentView.addSubview(responsibilityLabel)
@@ -139,26 +167,35 @@ final class VacancyCell: UITableViewCell {
             logoImageView.widthAnchor.constraint(equalToConstant: 100),
             logoImageView.heightAnchor.constraint(equalToConstant: 100),
             
-            nameLabel.topAnchor.constraint(equalTo: logoImageView.topAnchor),
-            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            nameLabel.trailingAnchor.constraint(equalTo: logoImageView.leadingAnchor, constant: -8),
+            mainInfoStackView.topAnchor.constraint(equalTo: logoImageView.topAnchor),
+            mainInfoStackView.bottomAnchor.constraint(equalTo: logoImageView.bottomAnchor),
+            mainInfoStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            mainInfoStackView.trailingAnchor.constraint(equalTo: logoImageView.leadingAnchor, constant: -8),
             
-            salaryLabel.centerYAnchor.constraint(equalTo: logoImageView.centerYAnchor),
-            salaryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            salaryLabel.trailingAnchor.constraint(equalTo: logoImageView.leadingAnchor, constant: -8),
-            
-            employerLabel.bottomAnchor.constraint(equalTo: logoImageView.bottomAnchor),
-            employerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            employerLabel.trailingAnchor.constraint(equalTo: logoImageView.leadingAnchor, constant: -8),
-            
-            requirementLabel.topAnchor.constraint(equalTo: employerLabel.bottomAnchor, constant: 8),
+            requirementLabel.topAnchor.constraint(equalTo: mainInfoStackView.bottomAnchor, constant: 8),
             requirementLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             requirementLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
-            responsibilityLabel.bottomAnchor.constraint(equalTo: requirementLabel.bottomAnchor, constant: 20),
+            responsibilityLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             responsibilityLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             responsibilityLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
         ])
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        
+        if selected {
+            UIView.animate(withDuration: 0.9) {
+                self.contentView.backgroundColor = .gray.withAlphaComponent(0.1)
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now()) {
+                UIView.animate(withDuration: 0.5) {
+                    self.contentView.backgroundColor = .secondarySystemGroupedBackground
+                }
+            }
+        }
     }
     
     func calculateCellHeight(with vacancy: Vacancy) -> CGFloat {

@@ -11,7 +11,7 @@
 "search" = "Search";
 "from" = "from";
 "to" = "to";
-
+"enterNameToShow" = "Enter the name into the search and a list of vacancies will appear";
 
 //MARK: - Alert
 "error" = "Error!";
