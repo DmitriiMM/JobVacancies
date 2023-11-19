@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 final class VacancyViewController: UIViewController {
     
@@ -18,6 +19,9 @@ final class VacancyViewController: UIViewController {
     private var isNeedNewPage = false
     private var nextPage: Int = 0
     private var searchingText: String?
+    
+    private var searchSubject = PassthroughSubject<String, Never>()
+    private var observers: Set<AnyCancellable> = []
     
     // MARK: - Subviews
     private lazy var tableView: UITableView = {
@@ -63,9 +67,9 @@ final class VacancyViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         loadData(for: nextPage, with: nil)
-        
         setupNavigationBar()
         setupSubviews()
+        setupCombine()
     }
     
     // MARK: - Private methods
@@ -99,6 +103,18 @@ final class VacancyViewController: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    private func setupCombine() {
+        searchSubject
+            .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
+            .removeDuplicates()
+            .sink { [weak self] searchText in
+                guard let self = self else { return }
+                self.searchingText = searchText
+                self.loadData(for: self.nextPage, with: searchText)
+            }
+            .store(in: &observers)
     }
     
     private func loadData(for nextPage: Int, with text: String?) {
@@ -147,20 +163,21 @@ extension VacancyViewController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        guard searchBar.text?.count != 0 else {
+        guard 
+            searchBar.text?.count != 0
+        else {
             visibleVacancies = []
             vacancies = []
             nextPage = 0
             showEmptyListLabelIfNeeded()
             tableView.reloadData()
-            return }
+            return
+        }
         
         guard let searchBarText = searchBar.text,
               searchText.count > 3
         else { return }
-        
-        searchingText = searchBarText
-        loadData(for: nextPage, with: searchingText)
+        searchSubject.send(searchBarText)
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

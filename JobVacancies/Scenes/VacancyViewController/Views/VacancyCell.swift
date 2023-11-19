@@ -10,6 +10,8 @@ import UIKit
 final class VacancyCell: UITableViewCell {
     static let identifier = String(describing: VacancyCell.self)
     
+    private var trailingConstraint = NSLayoutConstraint()
+    
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -112,6 +114,7 @@ final class VacancyCell: UITableViewCell {
             loadLogo(from: url)
         } else {
             logoImageView.isHidden = true
+            trailingConstraint.isActive = false
             mainInfoStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
         }
     }
@@ -162,6 +165,9 @@ final class VacancyCell: UITableViewCell {
     }
     
     private func addConstraints() {
+        trailingConstraint = mainInfoStackView.trailingAnchor.constraint(equalTo: logoImageView.leadingAnchor, constant: -8)
+        trailingConstraint.isActive = true
+        
         NSLayoutConstraint.activate([
             logoImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             logoImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
@@ -171,7 +177,6 @@ final class VacancyCell: UITableViewCell {
             mainInfoStackView.topAnchor.constraint(equalTo: logoImageView.topAnchor),
             mainInfoStackView.bottomAnchor.constraint(equalTo: logoImageView.bottomAnchor),
             mainInfoStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            mainInfoStackView.trailingAnchor.constraint(equalTo: logoImageView.leadingAnchor, constant: -8),
             
             requirementLabel.topAnchor.constraint(equalTo: mainInfoStackView.bottomAnchor, constant: 8),
             requirementLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
