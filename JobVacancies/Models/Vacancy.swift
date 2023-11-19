@@ -12,6 +12,7 @@ struct VacancyResult: Decodable {
 }
 
 struct Vacancy: Decodable {
+    let id: String
     let name: String
     let salary: Salary?
     let employer: Employer
@@ -20,6 +21,7 @@ struct Vacancy: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
+        id = try container.decode(String.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
         salary = try container.decode(Salary?.self, forKey: .salary)
         employer = try container.decode(Employer.self, forKey: .employer)
@@ -27,7 +29,7 @@ struct Vacancy: Decodable {
     }
     
     enum CodingKeys: String, CodingKey {
-        case name, salary, employer, snippet
+        case id, name, salary, employer, snippet
     }
 }
 
