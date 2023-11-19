@@ -30,8 +30,15 @@ final class VacancyViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.rowHeight = UITableView.automaticDimension
         tableView.keyboardDismissMode = .onDrag
-        
+        tableView.tableFooterView = spiner
         return tableView
+    }()
+    
+    private lazy var spiner: UIActivityIndicatorView = {
+        let spiner = UIActivityIndicatorView()
+        spiner.startAnimating()
+        spiner.isHidden = true
+        return spiner
     }()
     
     private lazy var emptyListLabel: UILabel = {
@@ -184,6 +191,10 @@ extension VacancyViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        spiner.isHidden = (indexPath.row + 1 == visibleVacancies.count) 
+        ? (visibleVacancies.count < 20)
+        : true
+        
         if tableView.isDragging || tableView.isDecelerating && tableView.scrollsToTop {
             if visibleVacancies.count >= AppInfo.apiPerPageCount * (nextPage + 1) && indexPath.row + 1 == visibleVacancies.count - 5 {
                 isNeedNewPage = true
