@@ -20,7 +20,7 @@ final class VacancyViewController: UIViewController {
     private var nextPage: Int = 0
     private var searchingText: String?
     
-    private var searchSubject = PassthroughSubject<String, Never>()
+    private var searchSubject = PassthroughSubject<String?, Never>()
     private var observers: Set<AnyCancellable> = []
     
     // MARK: - Subviews
@@ -83,7 +83,7 @@ final class VacancyViewController: UIViewController {
         
         searchController.automaticallyShowsCancelButton = true
         searchController.searchBar.delegate = self
-        searchController.searchBar.placeholder = "Search".localized
+        searchController.searchBar.placeholder = "search".localized
     }
     
     private func showEmptyListLabelIfNeeded() {
@@ -108,7 +108,6 @@ final class VacancyViewController: UIViewController {
     private func setupCombine() {
         searchSubject
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
-            .removeDuplicates()
             .sink { [weak self] searchText in
                 guard let self = self else { return }
                 self.searchingText = searchText
@@ -148,17 +147,21 @@ final class VacancyViewController: UIViewController {
             }
         }
     }
+    
+    private func clearTableView() {
+        visibleVacancies = []
+        vacancies = []
+        nextPage = 0
+        showEmptyListLabelIfNeeded()
+        tableView.reloadData()
+    }
 }
 
 // MARK: - UISearchBarDelegate
 extension VacancyViewController: UISearchBarDelegate {
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
         guard searchBar.text?.count == 0 else { return true }
-        visibleVacancies = []
-        vacancies = []
-        nextPage = 0
-        showEmptyListLabelIfNeeded()
-        tableView.reloadData()
+        clearTableView()
         return true
     }
     
@@ -166,38 +169,34 @@ extension VacancyViewController: UISearchBarDelegate {
         guard 
             searchBar.text?.count != 0
         else {
-            visibleVacancies = []
-            vacancies = []
-            nextPage = 0
-            showEmptyListLabelIfNeeded()
-            tableView.reloadData()
+            clearTableView()
             return
         }
         
         guard let searchBarText = searchBar.text,
               searchText.count > 3
         else { return }
+        
+        if let previousText = searchingText,
+           searchText != previousText {
+            clearTableView()
+        }
         searchSubject.send(searchBarText)
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchBarText = searchBar.text else { return }
-        searchingText = searchBarText
         navigationItem.searchController?.isActive = false
-        searchBar.text = searchingText
-        loadData(for: nextPage, with: searchingText)
+        searchBar.text = searchBarText
+        searchSubject.send(searchBarText)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
         searchBar.endEditing(true)
-        visibleVacancies = []
-        vacancies = []
-        nextPage = 0
+        clearTableView()
         searchingText = nil
-        loadData(for: nextPage, with: searchingText)
-        showEmptyListLabelIfNeeded()
-        tableView.reloadData()
+        searchSubject.send(searchingText)
     }
 }
 
@@ -209,13 +208,14 @@ extension VacancyViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         spiner.isHidden = (indexPath.row + 1 == visibleVacancies.count) 
-        ? (visibleVacancies.count < 20)
+        ? !(visibleVacancies.count == AppInfo.apiPerPageCount * (nextPage + 1))
         : true
         
         if tableView.isDragging || tableView.isDecelerating && tableView.scrollsToTop {
-            if visibleVacancies.count >= AppInfo.apiPerPageCount * (nextPage + 1) && indexPath.row + 1 == visibleVacancies.count - 5 {
+            if visibleVacancies.count >= AppInfo.apiPerPageCount * (nextPage + 1) 
+                && indexPath.row + 1 == visibleVacancies.count - 5 {
                 isNeedNewPage = true
-                loadData(for: nextPage, with: searchingText)
+                searchSubject.send(searchingText)
             }
         }
     }
