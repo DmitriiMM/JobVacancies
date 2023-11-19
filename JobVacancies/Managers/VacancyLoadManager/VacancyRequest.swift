@@ -31,7 +31,7 @@ struct VacancyRequest: NetworkRequest {
     let text: String?
     
     var token: String? {
-        AppInfo.apiKey
+        OAuthTokenStorage.shared.token
     }
     
     var endpoint: URL? {

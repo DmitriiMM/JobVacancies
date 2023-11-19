@@ -13,17 +13,17 @@ struct VacancyResult: Decodable {
 
 struct Vacancy: Decodable {
     let name: String
-    let salary: Salary
+    let salary: Salary?
     let employer: Employer
-    let snippet: Snippet
+    let snippet: Snippet?
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         name = try container.decode(String.self, forKey: .name)
-        salary = try container.decode(Salary.self, forKey: .salary)
+        salary = try container.decode(Salary?.self, forKey: .salary)
         employer = try container.decode(Employer.self, forKey: .employer)
-        snippet = try container.decode(Snippet.self, forKey: .snippet)
+        snippet = try container.decode(Snippet?.self, forKey: .snippet)
     }
     
     enum CodingKeys: String, CodingKey {
@@ -34,7 +34,7 @@ struct Vacancy: Decodable {
 struct Salary: Decodable {
     let from: Int?
     let to: Int?
-    let currency: String
+    let currency: String?
 }
 
 struct Employer: Decodable {
@@ -48,7 +48,11 @@ struct Employer: Decodable {
 }
 
 struct Logo: Decodable {
-    let original: String?
+    let url: String
+    
+    enum CodingKeys: String, CodingKey {
+        case url = "240"
+    }
 }
 
 struct Snippet: Decodable {

@@ -54,6 +54,7 @@ final class VacancyCell: UITableViewCell {
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 10
         imageView.clipsToBounds = true
+        imageView.backgroundColor = .white
         return imageView
     }()
     
@@ -62,6 +63,7 @@ final class VacancyCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .systemGray2
         label.font = .systemFont(ofSize: 12)
+        label.numberOfLines = 0
         return label
     }()
     
@@ -70,6 +72,7 @@ final class VacancyCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .systemGray2
         label.font = .systemFont(ofSize: 12)
+        label.numberOfLines = 0
         return label
     }()
     
@@ -100,47 +103,45 @@ final class VacancyCell: UITableViewCell {
     
     func configure(by vacancy: Vacancy) {
         nameLabel.text = vacancy.name
-        salaryLabel.text = ""
-        if let salaryFrom = vacancy.salary.from {
-            salaryLabel.text?.append((vacancy.salary.to == nil 
-                                      ? "from".localized + " "
-                                      : "") + String(salaryFrom))
-        }
-
-        if let salaryTo = vacancy.salary.to {
-            salaryLabel.text?.append((vacancy.salary.from == nil 
-                                      ? "to".localized + " "
-                                      : " - ") + String(salaryTo))
-        }
-        
-        if salaryLabel.text != "" {
-            salaryLabel.text?.append(" " + vacancy.salary.currency)
-        }
-        
         employerLabel.text = vacancy.employer.name
         
+        setupSalaryLabel(by: vacancy)
+        setupDescriptionLabels(by: vacancy)
         
-            
-        if let url = vacancy.employer.logo?.original {
+        if let url = vacancy.employer.logo?.url {
             loadLogo(from: url)
         } else {
             logoImageView.isHidden = true
             mainInfoStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
         }
-        
-        if let requirement = vacancy.snippet.requirement,
-           !requirement.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            requirementLabel.text = requirement
-        } else {
-            requirementLabel.isHidden = true
+    }
+    
+    private func setupSalaryLabel(by vacancy: Vacancy) {
+        salaryLabel.text = ""
+        if let salaryFrom = vacancy.salary?.from {
+            salaryLabel.text?.append((vacancy.salary?.to == nil
+                                      ? "from".localized + " "
+                                      : "") + String(salaryFrom))
+        }
+
+        if let salaryTo = vacancy.salary?.to {
+            salaryLabel.text?.append((vacancy.salary?.from == nil
+                                      ? "to".localized + " "
+                                      : " - ") + String(salaryTo))
         }
         
-        if let responsibility = vacancy.snippet.responsibility,
-           !responsibility.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            responsibilityLabel.text = responsibility
-        } else {
-            responsibilityLabel.isHidden = true
+        if salaryLabel.text != "" {
+            salaryLabel.text?.append(" " + (vacancy.salary?.currency ?? ""))
         }
+    }
+    
+    private func setupDescriptionLabels(by vacancy: Vacancy) {
+        let requirementText = vacancy.snippet?.requirement ?? ""
+        let responsibilityText = vacancy.snippet?.responsibility ?? ""
+        requirementLabel.text = requirementText
+        responsibilityLabel.text = responsibilityText
+        requirementLabel.isHidden = requirementText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        responsibilityLabel.isHidden = responsibilityText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
     private func loadLogo(from stringUrl: String) {
@@ -176,9 +177,10 @@ final class VacancyCell: UITableViewCell {
             requirementLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             requirementLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
-            responsibilityLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            responsibilityLabel.topAnchor.constraint(equalTo: requirementLabel.bottomAnchor, constant: 8),
             responsibilityLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            responsibilityLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+            responsibilityLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            responsibilityLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
         ])
     }
     
@@ -195,19 +197,6 @@ final class VacancyCell: UITableViewCell {
                     self.contentView.backgroundColor = .secondarySystemGroupedBackground
                 }
             }
-        }
-    }
-    
-    func calculateCellHeight(with vacancy: Vacancy) -> CGFloat {
-        switch (vacancy.snippet.requirement == nil, vacancy.snippet.responsibility == nil) {
-        case (true, true):
-            return 148
-        case (false, true):
-            return 168
-        case (true, false):
-            return 168
-        case (false, false):
-            return 188
         }
     }
 }

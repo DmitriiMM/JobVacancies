@@ -16,6 +16,11 @@
 		A366BE0F2B02A3C3007287C5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A366BE0E2B02A3C3007287C5 /* Localizable.strings */; };
 		A366BE132B02A592007287C5 /* VacancyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A366BE122B02A592007287C5 /* VacancyCell.swift */; };
 		A366BE152B02A665007287C5 /* Vacancy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A366BE142B02A665007287C5 /* Vacancy.swift */; };
+		A370C6992B073CF90016C7EA /* OAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A370C6982B073CF90016C7EA /* OAuthService.swift */; };
+		A370C69C2B073EAA0016C7EA /* OAuthTokenResponseBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = A370C69B2B073EAA0016C7EA /* OAuthTokenResponseBody.swift */; };
+		A370C6A12B0742D10016C7EA /* URLSession+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A370C6A02B0742D10016C7EA /* URLSession+Extension.swift */; };
+		A370C6A32B0744500016C7EA /* OAuthTokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A370C6A22B0744500016C7EA /* OAuthTokenStorage.swift */; };
+		A370C6A62B0744950016C7EA /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = A370C6A52B0744950016C7EA /* SwiftKeychainWrapper */; };
 		A3AB60042B03C980003694DF /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3AB60032B03C980003694DF /* UIView+Extensions.swift */; };
 		A3D029742B0546E700748BFC /* UImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D029732B0546E700748BFC /* UImageView+Extensions.swift */; };
 		A3D029772B05471E00748BFC /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = A3D029762B05471E00748BFC /* Kingfisher */; };
@@ -41,6 +46,10 @@
 		A366BE0E2B02A3C3007287C5 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		A366BE122B02A592007287C5 /* VacancyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VacancyCell.swift; sourceTree = "<group>"; };
 		A366BE142B02A665007287C5 /* Vacancy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vacancy.swift; sourceTree = "<group>"; };
+		A370C6982B073CF90016C7EA /* OAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthService.swift; sourceTree = "<group>"; };
+		A370C69B2B073EAA0016C7EA /* OAuthTokenResponseBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthTokenResponseBody.swift; sourceTree = "<group>"; };
+		A370C6A02B0742D10016C7EA /* URLSession+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Extension.swift"; sourceTree = "<group>"; };
+		A370C6A22B0744500016C7EA /* OAuthTokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthTokenStorage.swift; sourceTree = "<group>"; };
 		A3AB60032B03C980003694DF /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		A3D029732B0546E700748BFC /* UImageView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UImageView+Extensions.swift"; sourceTree = "<group>"; };
 		A3FBFD0E2B04DD6900573E51 /* VacancyLoadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VacancyLoadManager.swift; sourceTree = "<group>"; };
@@ -59,6 +68,7 @@
 			files = (
 				A3D029772B05471E00748BFC /* Kingfisher in Frameworks */,
 				A3FBFD1D2B04EFCB00573E51 /* ProgressHUD in Frameworks */,
+				A370C6A62B0744950016C7EA /* SwiftKeychainWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,6 +142,7 @@
 				A3FBFD192B04EB7700573E51 /* UIViewController+Extensions.swift */,
 				A3FBFD1E2B04EFE900573E51 /* UIBlockingProgressHUD.swift */,
 				A3D029732B0546E700748BFC /* UImageView+Extensions.swift */,
+				A370C6A02B0742D10016C7EA /* URLSession+Extension.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -153,11 +164,30 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		A3FBFD0D2B04DD2800573E51 /* Managers */ = {
+		A370C69A2B073CFE0016C7EA /* OAuthService */ = {
+			isa = PBXGroup;
+			children = (
+				A370C6982B073CF90016C7EA /* OAuthService.swift */,
+				A370C69B2B073EAA0016C7EA /* OAuthTokenResponseBody.swift */,
+				A370C6A22B0744500016C7EA /* OAuthTokenStorage.swift */,
+			);
+			path = OAuthService;
+			sourceTree = "<group>";
+		};
+		A370C69D2B073F250016C7EA /* VacancyLoadManager */ = {
 			isa = PBXGroup;
 			children = (
 				A3FBFD0E2B04DD6900573E51 /* VacancyLoadManager.swift */,
 				A3FBFD152B04DF2B00573E51 /* VacancyRequest.swift */,
+			);
+			path = VacancyLoadManager;
+			sourceTree = "<group>";
+		};
+		A3FBFD0D2B04DD2800573E51 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				A370C69D2B073F250016C7EA /* VacancyLoadManager */,
+				A370C69A2B073CFE0016C7EA /* OAuthService */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -190,6 +220,7 @@
 			packageProductDependencies = (
 				A3FBFD1C2B04EFCB00573E51 /* ProgressHUD */,
 				A3D029762B05471E00748BFC /* Kingfisher */,
+				A370C6A52B0744950016C7EA /* SwiftKeychainWrapper */,
 			);
 			productName = JobVacancies;
 			productReference = A366BDF02B029FC8007287C5 /* JobVacancies.app */;
@@ -222,6 +253,7 @@
 			packageReferences = (
 				A3FBFD1B2B04EFCB00573E51 /* XCRemoteSwiftPackageReference "ProgressHUD" */,
 				A3D029752B05471E00748BFC /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				A370C6A42B0744950016C7EA /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
 			);
 			productRefGroup = A366BDF12B029FC8007287C5 /* Products */;
 			projectDirPath = "";
@@ -252,13 +284,17 @@
 			files = (
 				A366BE0D2B02A2EC007287C5 /* String+Extensions.swift in Sources */,
 				A3AB60042B03C980003694DF /* UIView+Extensions.swift in Sources */,
+				A370C6992B073CF90016C7EA /* OAuthService.swift in Sources */,
 				A3FBFD1A2B04EB7700573E51 /* UIViewController+Extensions.swift in Sources */,
 				A366BDF82B029FC8007287C5 /* VacancyViewController.swift in Sources */,
+				A370C6A32B0744500016C7EA /* OAuthTokenStorage.swift in Sources */,
+				A370C69C2B073EAA0016C7EA /* OAuthTokenResponseBody.swift in Sources */,
 				A3FBFD162B04DF2B00573E51 /* VacancyRequest.swift in Sources */,
 				A3FBFD0F2B04DD6900573E51 /* VacancyLoadManager.swift in Sources */,
 				A3FBFD142B04DE1700573E51 /* NetworkRequest.swift in Sources */,
 				A366BDF42B029FC8007287C5 /* AppDelegate.swift in Sources */,
 				A3FBFD112B04DDDD00573E51 /* NetworkClient.swift in Sources */,
+				A370C6A12B0742D10016C7EA /* URLSession+Extension.swift in Sources */,
 				A366BE132B02A592007287C5 /* VacancyCell.swift in Sources */,
 				A366BDF62B029FC8007287C5 /* SceneDelegate.swift in Sources */,
 				A366BE152B02A665007287C5 /* Vacancy.swift in Sources */,
@@ -481,6 +517,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		A370C6A42B0744950016C7EA /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jrendel/SwiftKeychainWrapper";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.1;
+			};
+		};
 		A3D029752B05471E00748BFC /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher";
@@ -500,6 +544,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A370C6A52B0744950016C7EA /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A370C6A42B0744950016C7EA /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
 		A3D029762B05471E00748BFC /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A3D029752B05471E00748BFC /* XCRemoteSwiftPackageReference "Kingfisher" */;

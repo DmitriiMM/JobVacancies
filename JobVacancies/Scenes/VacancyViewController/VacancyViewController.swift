@@ -7,12 +7,14 @@
 
 import UIKit
 
-class VacancyViewController: UIViewController {
+final class VacancyViewController: UIViewController {
     
     // MARK: - Properties
     private var visibleVacancies: [Vacancy] = []
     private var vacancies: [Vacancy] = []
     private let loadManager = VacancyLoadManager.shared
+    private let oauthTokenStorage = OAuthTokenStorage.shared
+    private let oauthService = OAuthService.shared
     private var isNeedNewPage = false
     private var nextPage: Int = 0
     private var searchingText: String?
@@ -26,6 +28,8 @@ class VacancyViewController: UIViewController {
         tableView.dataSource = self
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.keyboardDismissMode = .onDrag
         
         return tableView
     }()
@@ -62,8 +66,6 @@ class VacancyViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "vacancies".localized
         
-//        updateTitle()
-        
         let searchController = UISearchController(searchResultsController: nil)
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
@@ -72,10 +74,6 @@ class VacancyViewController: UIViewController {
         searchController.searchBar.delegate = self
         searchController.searchBar.placeholder = "Search".localized
     }
-    
-//    func updateTitle() {
-//        title = "vacancies".localized + " " + String(visibleVacancies.count)
-//    }
     
     private func showEmptyListLabelIfNeeded() {
         if visibleVacancies.isEmpty {
@@ -97,9 +95,10 @@ class VacancyViewController: UIViewController {
     }
     
     private func loadData(for nextPage: Int, with text: String?) {
-        if navigationItem.searchController?.searchBar.text == nil {
+        if !isNeedNewPage {
             UIBlockingProgressHUD.show()
         }
+        
         loadManager.getVacancies(for: nextPage, with: text) { [weak self] result in
             guard let self else { return }
             DispatchQueue.main.async {
@@ -110,25 +109,15 @@ class VacancyViewController: UIViewController {
                         self.isNeedNewPage = false
                     }
                     
-                    if text != nil {
-                        self.vacancies.removeAll()
-                        self.vacancies.append(contentsOf: result.items)
-                        self.visibleVacancies = self.vacancies
-//                        self.updateTitle()
-                        self.showEmptyListLabelIfNeeded()
-                        self.tableView.reloadData()
-                    } else {
-                        let oldCountVacancies = self.vacancies.count
-                        self.vacancies.append(contentsOf: result.items)
-                        self.visibleVacancies = self.vacancies
-                        self.showEmptyListLabelIfNeeded()
-//                        self.updateTitle()
-                        self.tableView.performBatchUpdates({
-                            let indexPaths = (oldCountVacancies ..< (oldCountVacancies + result.items.count))
-                                .map { IndexPath(row: $0, section: 0) }
-                            self.tableView.insertRows(at: indexPaths, with: .automatic)
-                        }, completion: nil)
-                    }
+                    let oldCountVacancies = self.vacancies.count
+                    self.vacancies.append(contentsOf: result.items)
+                    self.visibleVacancies = self.vacancies
+                    self.showEmptyListLabelIfNeeded()
+                    self.tableView.performBatchUpdates({
+                        let indexPaths = (oldCountVacancies ..< (oldCountVacancies + result.items.count))
+                            .map { IndexPath(row: $0, section: 0) }
+                        self.tableView.insertRows(at: indexPaths, with: .automatic)
+                    }, completion: nil)
                 case .failure(let error):
                     self.presentErrorDialog(message: error.localizedDescription)
                 }
@@ -141,16 +130,24 @@ class VacancyViewController: UIViewController {
 // MARK: - UISearchBarDelegate
 extension VacancyViewController: UISearchBarDelegate {
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        guard searchBar.text?.count == 0 else { return false }
+        guard searchBar.text?.count == 0 else { return true }
         visibleVacancies = []
-        self.showEmptyListLabelIfNeeded()
-//        self.updateTitle()
+        vacancies = []
         nextPage = 0
+        showEmptyListLabelIfNeeded()
         tableView.reloadData()
         return true
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard searchBar.text?.count != 0 else {
+            visibleVacancies = []
+            vacancies = []
+            nextPage = 0
+            showEmptyListLabelIfNeeded()
+            tableView.reloadData()
+            return }
+        
         guard let searchBarText = searchBar.text,
               searchText.count > 3
         else { return }
@@ -160,19 +157,21 @@ extension VacancyViewController: UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
         guard let searchBarText = searchBar.text else { return }
-        
-        navigationItem.searchController?.isActive = false
         searchingText = searchBarText
-        searchBar.text = searchBarText
+        navigationItem.searchController?.isActive = false
+        searchBar.text = searchingText
         loadData(for: nextPage, with: searchingText)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
         searchBar.endEditing(true)
-        visibleVacancies = vacancies
+        visibleVacancies = []
+        vacancies = []
+        nextPage = 0
+        searchingText = nil
+        loadData(for: nextPage, with: searchingText)
         showEmptyListLabelIfNeeded()
         tableView.reloadData()
     }
@@ -205,12 +204,5 @@ extension VacancyViewController: UITableViewDataSource {
         cell.configure(by: visibleVacancies[indexPath.row])
         
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let vacancy = visibleVacancies[indexPath.row]
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: VacancyCell.identifier) as? VacancyCell else { return CGFloat() }
-        
-        return cell.calculateCellHeight(with: vacancy)
     }
 }
