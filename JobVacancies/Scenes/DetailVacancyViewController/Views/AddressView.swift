@@ -136,6 +136,10 @@ final class AddressView: UIView {
         let region = MKCoordinateRegion(center: coordinate, span: span)
         
         mapView.setRegion(region, animated: true)
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        mapView.addAnnotation(annotation)
     }
     
     private func loadLogo(from stringUrl: String) {
