@@ -157,7 +157,17 @@ final class DetailVacancyViewController: UIViewController {
         nameLabel.text = vacancy.name
         setupSalaryLabel(by: vacancy)
         addressView.set(vacancy: vacancy)
-        descriptionLabel.text = vacancy.description
+        
+        if let decodedAttributedString = decodeHTMLString(vacancy.description) {
+            let customAttributes: [NSAttributedString.Key: Any] = [
+                .foregroundColor: UIColor.label
+            ]
+            let range = NSRange(location: 0, length: decodedAttributedString.length)
+            let attributedString = NSMutableAttributedString(attributedString: decodedAttributedString)
+            attributedString.addAttributes(customAttributes, range: NSRange(location: 0, length: decodedAttributedString.length))
+            
+            descriptionLabel.attributedText = attributedString
+        }
     }
     
     private func setupSalaryLabel(by vacancy: Vacancy) {
@@ -181,6 +191,25 @@ final class DetailVacancyViewController: UIViewController {
         if let isGross = vacancy.salary?.gross {
             let gross = isGross ? "gross".localized : "net".localized
             salaryLabel.text?.append(" " + gross)
+        }
+    }
+    
+    private func decodeHTMLString(_ htmlString: String?) -> NSAttributedString? {
+        guard let data = htmlString?.data(using: .utf8) else {
+            return nil
+        }
+        
+        let options: [NSAttributedString.DocumentReadingOptionKey: Any] = [
+            .documentType: NSAttributedString.DocumentType.html,
+            .characterEncoding: String.Encoding.utf8.rawValue
+        ]
+        
+        do {
+            let attributedString = try NSAttributedString(data: data, options: options, documentAttributes: nil)
+            return attributedString
+        } catch {
+            print("Error decoding HTML string: \(error)")
+            return nil
         }
     }
     
