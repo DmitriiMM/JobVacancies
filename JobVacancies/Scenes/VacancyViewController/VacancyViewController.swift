@@ -67,9 +67,13 @@ final class VacancyViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         loadData(for: nextPage, with: nil)
-        setupNavigationBar()
         setupSubviews()
         setupCombine()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupNavigationBar()
     }
     
     // MARK: - Private methods
@@ -203,7 +207,20 @@ extension VacancyViewController: UISearchBarDelegate {
 // MARK: - UITableViewDelegate UITableViewDataSource
 extension VacancyViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vacancy = visibleVacancies[indexPath.row]
         
+        loadManager.getVacancyDetail(for: vacancy.id) { [weak self] result in
+            guard let self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let result):
+                    let detailVC = DetailVacancyViewController(vacancy: result)
+                    self.navigationController?.pushViewController(detailVC, animated: true)
+                case .failure(let error):
+                    self.presentErrorDialog(message: error.localizedDescription)
+                }
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

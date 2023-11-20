@@ -8,10 +8,13 @@
 import UIKit
 
 final class VacancyCell: UITableViewCell {
+    
+    // MARK: - Properties
     static let identifier = String(describing: VacancyCell.self)
     
     private var trailingConstraint = NSLayoutConstraint()
     
+    // MARK: - Subviews
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -78,6 +81,7 @@ final class VacancyCell: UITableViewCell {
         return label
     }()
     
+    // MARK: - Lifecycle methods
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -103,14 +107,15 @@ final class VacancyCell: UITableViewCell {
                                     radius: 5))
     }
     
+    // MARK: - methods
     func configure(by vacancy: Vacancy) {
         nameLabel.text = vacancy.name
-        employerLabel.text = vacancy.employer.name
+        employerLabel.text = vacancy.employer?.name
         
         setupSalaryLabel(by: vacancy)
         setupDescriptionLabels(by: vacancy)
         
-        if let url = vacancy.employer.logo?.url {
+        if let url = vacancy.employer?.logo?.url {
             loadLogo(from: url)
         } else {
             logoImageView.isHidden = true
@@ -119,6 +124,7 @@ final class VacancyCell: UITableViewCell {
         }
     }
     
+    // MARK: - Private methods
     private func setupSalaryLabel(by vacancy: Vacancy) {
         salaryLabel.text = ""
         if let salaryFrom = vacancy.salary?.from {

@@ -13,4 +13,10 @@ extension UIViewController {
         errorDialog.addAction(UIAlertAction(title: "ok".localized, style: .default))
         present(errorDialog, animated: true)
     }
+    
+    func presentDialog(title: String?) {
+        let dialog = UIAlertController(title: title, message: nil, preferredStyle: .alert)
+        dialog.addAction(UIAlertAction(title: "ok".localized, style: .default))
+        present(dialog, animated: true)
+    }
 }
