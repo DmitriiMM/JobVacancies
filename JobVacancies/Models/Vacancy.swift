@@ -18,6 +18,7 @@ struct Vacancy: Decodable {
     let employer: Employer?
     let snippet: Snippet?
     let address: Address?
+    let description: String?
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -28,10 +29,11 @@ struct Vacancy: Decodable {
         employer = try container.decodeIfPresent(Employer.self, forKey: .employer)
         snippet = try container.decodeIfPresent(Snippet.self, forKey: .snippet)
         address  = try container.decodeIfPresent(Address.self, forKey: .address)
+        description  = try container.decodeIfPresent(String.self, forKey: .description)
     }
     
     enum CodingKeys: String, CodingKey {
-        case id, name, salary, employer, snippet, address
+        case id, name, salary, employer, snippet, address, description
     }
 }
 

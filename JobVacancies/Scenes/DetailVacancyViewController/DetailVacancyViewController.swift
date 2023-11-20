@@ -58,6 +58,29 @@ final class DetailVacancyViewController: UIViewController {
         return view
     }()
     
+    private lazy var descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .label
+        label.font = .systemFont(ofSize: 15)
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    private lazy var button: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.cornerRadius = 10
+        button.backgroundColor = #colorLiteral(red: 0.2901884317, green: 0.699102819, blue: 0.3045158386, alpha: 1)
+        button.tintColor = .white
+        button.setTitleColor(.lightGray, for: .highlighted)
+        button.setTitle("respond".localized, for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 17)
+        button.addTarget(self, action: #selector(respondButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
     // MARK: - Lifecycle methods
     init(vacancy: Vacancy) {
         self.vacancy = vacancy
@@ -88,6 +111,8 @@ final class DetailVacancyViewController: UIViewController {
         containerView.addSubview(nameLabel)
         containerView.addSubview(salaryLabel)
         containerView.addSubview(addressView)
+        containerView.addSubview(descriptionLabel)
+        view.addSubview(button)
     }
     
     private func addConstraints() {
@@ -101,7 +126,7 @@ final class DetailVacancyViewController: UIViewController {
             containerView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
             containerView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            containerView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -100),
             containerView.widthAnchor.constraint(equalTo: view.widthAnchor),
             
             nameLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8),
@@ -115,7 +140,16 @@ final class DetailVacancyViewController: UIViewController {
             addressView.topAnchor.constraint(equalTo: salaryLabel.bottomAnchor, constant: 8),
             addressView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
             addressView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
-            addressView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            
+            descriptionLabel.topAnchor.constraint(equalTo: addressView.bottomAnchor, constant: 8),
+            descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            descriptionLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            
+            button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            button.heightAnchor.constraint(equalToConstant: 54),
         ])
     }
     
@@ -123,6 +157,7 @@ final class DetailVacancyViewController: UIViewController {
         nameLabel.text = vacancy.name
         setupSalaryLabel(by: vacancy)
         addressView.set(vacancy: vacancy)
+        descriptionLabel.text = vacancy.description
     }
     
     private func setupSalaryLabel(by vacancy: Vacancy) {
@@ -147,5 +182,10 @@ final class DetailVacancyViewController: UIViewController {
             let gross = isGross ? "gross".localized : "net".localized
             salaryLabel.text?.append(" " + gross)
         }
+    }
+    
+    @objc 
+    private func respondButtonTapped() {
+        presentDialog(title: "yourResponseHasBeenSent".localized)
     }
 }
