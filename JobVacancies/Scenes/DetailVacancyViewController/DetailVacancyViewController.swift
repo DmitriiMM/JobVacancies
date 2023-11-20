@@ -160,7 +160,8 @@ final class DetailVacancyViewController: UIViewController {
         
         if let decodedAttributedString = decodeHTMLString(vacancy.description) {
             let customAttributes: [NSAttributedString.Key: Any] = [
-                .foregroundColor: UIColor.label
+                .foregroundColor: UIColor.label,
+                .font: UIFont.systemFont(ofSize: 15)
             ]
             let range = NSRange(location: 0, length: decodedAttributedString.length)
             let attributedString = NSMutableAttributedString(attributedString: decodedAttributedString)
