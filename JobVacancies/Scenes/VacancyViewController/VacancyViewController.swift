@@ -67,9 +67,13 @@ final class VacancyViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         loadData(for: nextPage, with: nil)
-        setupNavigationBar()
         setupSubviews()
         setupCombine()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupNavigationBar()
     }
     
     // MARK: - Private methods

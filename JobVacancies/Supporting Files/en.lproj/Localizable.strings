@@ -16,3 +16,7 @@
 //MARK: - Alert
 "error" = "Error!";
 "ok" = "Ok";
+
+//MARK: - Detail vacancy scene
+"gross" = "gross";
+"net" = "net";

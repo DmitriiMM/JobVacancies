@@ -16,3 +16,7 @@
 //MARK: - Alert
 "error" = "Ошибка!";
 "ok" = "Понятно";
+
+//MARK: - Detail vacancy scene
+"gross" = "до вычета";
+"net" = "на руки";
