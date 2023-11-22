@@ -20,6 +20,8 @@
 		A370C6A12B0742D10016C7EA /* URLSession+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A370C6A02B0742D10016C7EA /* URLSession+Extension.swift */; };
 		A370C6A32B0744500016C7EA /* OAuthTokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A370C6A22B0744500016C7EA /* OAuthTokenStorage.swift */; };
 		A370C6A62B0744950016C7EA /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = A370C6A52B0744950016C7EA /* SwiftKeychainWrapper */; };
+		A37EB6C12B0D19F70005293E /* SuggestsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37EB6C02B0D19F70005293E /* SuggestsRequest.swift */; };
+		A37EB6C32B0D1B620005293E /* Suggests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37EB6C22B0D1B620005293E /* Suggests.swift */; };
 		A3AB60042B03C980003694DF /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3AB60032B03C980003694DF /* UIView+Extensions.swift */; };
 		A3D029742B0546E700748BFC /* UImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D029732B0546E700748BFC /* UImageView+Extensions.swift */; };
 		A3D029772B05471E00748BFC /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = A3D029762B05471E00748BFC /* Kingfisher */; };
@@ -53,6 +55,8 @@
 		A370C69B2B073EAA0016C7EA /* OAuthTokenResponseBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthTokenResponseBody.swift; sourceTree = "<group>"; };
 		A370C6A02B0742D10016C7EA /* URLSession+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Extension.swift"; sourceTree = "<group>"; };
 		A370C6A22B0744500016C7EA /* OAuthTokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthTokenStorage.swift; sourceTree = "<group>"; };
+		A37EB6C02B0D19F70005293E /* SuggestsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestsRequest.swift; sourceTree = "<group>"; };
+		A37EB6C22B0D1B620005293E /* Suggests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Suggests.swift; sourceTree = "<group>"; };
 		A3AB60032B03C980003694DF /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		A3D029732B0546E700748BFC /* UImageView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UImageView+Extensions.swift"; sourceTree = "<group>"; };
 		A3E9F5232B0A75350069126C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -121,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				A366BE142B02A665007287C5 /* Vacancy.swift */,
+				A37EB6C22B0D1B620005293E /* Suggests.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -210,6 +215,7 @@
 			children = (
 				A3FBFD152B04DF2B00573E51 /* VacancyRequest.swift */,
 				A3E9F53F2B0A8D980069126C /* DetailVacancyRequest.swift */,
+				A37EB6C02B0D19F70005293E /* SuggestsRequest.swift */,
 			);
 			path = Requests;
 			sourceTree = "<group>";
@@ -336,6 +342,7 @@
 				A3FBFD142B04DE1700573E51 /* NetworkRequest.swift in Sources */,
 				A366BDF42B029FC8007287C5 /* AppDelegate.swift in Sources */,
 				A3FBFD112B04DDDD00573E51 /* NetworkClient.swift in Sources */,
+				A37EB6C12B0D19F70005293E /* SuggestsRequest.swift in Sources */,
 				A370C6A12B0742D10016C7EA /* URLSession+Extension.swift in Sources */,
 				A366BE132B02A592007287C5 /* VacancyCell.swift in Sources */,
 				A366BDF62B029FC8007287C5 /* SceneDelegate.swift in Sources */,
@@ -344,6 +351,7 @@
 				A3E9F5372B0A7C660069126C /* DetailVacancyViewController.swift in Sources */,
 				A3D029742B0546E700748BFC /* UImageView+Extensions.swift in Sources */,
 				A3E9F5402B0A8D980069126C /* DetailVacancyRequest.swift in Sources */,
+				A37EB6C32B0D1B620005293E /* Suggests.swift in Sources */,
 				A3FBFD1F2B04EFE900573E51 /* UIBlockingProgressHUD.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -434,7 +442,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -492,7 +500,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;

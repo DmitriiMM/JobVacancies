@@ -15,8 +15,8 @@ enum Param: String, CodingKey {
 }
 
 struct RestAppearance {
-    static let testBaseUrl = "https://api.hh.ru/vacancies"
-    static let prodBaseUrl = "https://api.hh.ru/vacancies"
+    static let testBaseUrl = "https://api.hh.ru"
+    static let prodBaseUrl = "https://api.hh.ru"
     
     static var baseUrl: String {
         switch AppInfo.apiServerType {
@@ -39,7 +39,7 @@ struct VacancyRequest: NetworkRequest {
     }
     
     private func createEndPoint() -> URL? {
-        var components = URLComponents(string: RestAppearance.baseUrl)
+        var components = URLComponents(string: RestAppearance.baseUrl + "/vacancies")
         var queryItems = [
             URLQueryItem(name: Param.perPage.rawValue, value: "\(AppInfo.apiPerPageCount)"),
             URLQueryItem(name: Param.page.rawValue, value: "\(nextPage)")

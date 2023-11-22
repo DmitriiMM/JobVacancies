@@ -24,6 +24,15 @@ final class VacancyViewController: UIViewController {
     private var observers: Set<AnyCancellable> = []
     
     // MARK: - Subviews
+    private lazy var searchController: UISearchController = {
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.automaticallyShowsCancelButton = true
+        searchController.searchBar.delegate = self
+        searchController.searchBar.placeholder = "search".localized
+        searchController.searchResultsUpdater = self
+        return searchController
+    }()
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -80,14 +89,8 @@ final class VacancyViewController: UIViewController {
     private func setupNavigationBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "vacancies".localized
-        
-        let searchController = UISearchController(searchResultsController: nil)
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
-        
-        searchController.automaticallyShowsCancelButton = true
-        searchController.searchBar.delegate = self
-        searchController.searchBar.placeholder = "search".localized
     }
     
     private func showEmptyListLabelIfNeeded() {
@@ -152,12 +155,43 @@ final class VacancyViewController: UIViewController {
         }
     }
     
+    @available(iOS 16.0, *)
+    private func loadSuggests(for text: String) {
+        loadManager.getSuggests(with: text) { [weak self] result in
+            guard let self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let result):
+                    self.searchController.searchSuggestions = result.items.compactMap {
+                        UISearchSuggestionItem(localizedSuggestion: $0.text)
+                    }
+                case .failure(_):
+                    print("Error while getting suggests!")
+                    break
+                }
+            }
+        }
+    }
+    
     private func clearTableView() {
         visibleVacancies = []
         vacancies = []
         nextPage = 0
         showEmptyListLabelIfNeeded()
         tableView.reloadData()
+    }
+}
+
+// MARK: - UISearchResultsUpdating
+@available(iOS 16.0, *)
+extension VacancyViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) { }
+    
+    func updateSearchResults(for searchController: UISearchController, selecting searchSuggestion: UISearchSuggestion) {
+        if let text = searchSuggestion.localizedSuggestion {
+            searchController.searchBar.text = text
+            searchSubject.send(text)
+        }
     }
 }
 
@@ -177,15 +211,24 @@ extension VacancyViewController: UISearchBarDelegate {
             return
         }
         
-        guard let searchBarText = searchBar.text,
-              searchText.count > 3
-        else { return }
-        
         if let previousText = searchingText,
            searchText != previousText {
             clearTableView()
         }
-        searchSubject.send(searchBarText)
+        
+        if #available(iOS 16.0, *) {
+            guard let searchBarText = searchBar.text,
+                  searchText.count > 1
+            else { return }
+            
+            loadSuggests(for: searchBarText)
+        } else {
+            guard let searchBarText = searchBar.text,
+                  searchText.count > 3
+            else { return }
+            
+            searchSubject.send(searchBarText)
+        }
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

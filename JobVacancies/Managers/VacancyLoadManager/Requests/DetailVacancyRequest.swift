@@ -15,6 +15,6 @@ struct DetailVacancyRequest: NetworkRequest {
     }
     
     var endpoint: URL? {
-        URL(string: "\(RestAppearance.baseUrl)/\(id)")
+        URL(string: "\(RestAppearance.baseUrl)/vacancies/\(id)")
     }
 }

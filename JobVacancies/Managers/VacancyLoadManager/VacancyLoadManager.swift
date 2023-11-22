@@ -31,4 +31,12 @@ class VacancyLoadManager: VacancyLoadProtocol {
             self.client.send(request: request, type: Vacancy.self, onResponse: onCompletion)
         }
     }
+    
+    func getSuggests(with text: String, onCompletion: @escaping (Result<Suggests, Error>) -> Void) {
+        DispatchQueue.main.async {
+            let request = SuggestsRequest(text: text)
+            
+            self.client.send(request: request, type: Suggests.self, onResponse: onCompletion)
+        }
+    }
 }
